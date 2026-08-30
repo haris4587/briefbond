@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Northstar Summer Hydration — BriefBond Evidence</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: #f8f5ff;
+        color: #171329;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(circle at 14% 12%, rgba(255, 225, 112, 0.75), transparent 30%),
+          radial-gradient(circle at 86% 84%, rgba(123, 92, 255, 0.25), transparent 34%),
+          #f8f5ff;
+      }
+
+      main {
+        width: min(100% - 28px, 720px);
+        margin: 0 auto;
+        padding: 28px 0 40px;
+      }
+
+      .evidence-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 14px;
+        color: #554d73;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .verified {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 11px;
+        border: 1px solid #b8ead2;
+        border-radius: 999px;
+        background: #eafaf2;
+        color: #176b49;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      .verified::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #20a36d;
+      }
+
+      article {
+        overflow: hidden;
+        border: 1px solid rgba(68, 50, 130, 0.15);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 24px 70px rgba(55, 36, 112, 0.17);
+      }
+
+      .brand-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 19px 20px;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 46px;
+        height: 46px;
+        place-items: center;
+        border-radius: 15px;
+        background: #241c47;
+        color: #fff;
+        font-size: 19px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+      }
+
+      .brand-name {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 850;
+      }
+
+      .disclosure {
+        margin: 3px 0 0;
+        color: #655d80;
+        font-size: 13px;
+        font-weight: 650;
+      }
+
+      .creative {
+        position: relative;
+        min-height: 420px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: clamp(28px, 7vw, 54px);
+        isolation: isolate;
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.22), transparent 45%),
+          linear-gradient(135deg, #ffcd48 0%, #ff7f50 47%, #8057ff 100%);
+        color: #20183c;
+      }
+
+      .creative::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        right: -70px;
+        bottom: -90px;
+        width: 270px;
+        height: 270px;
+        border: 44px solid rgba(255, 255, 255, 0.22);
+        border-radius: 50%;
+      }
+
+      .eyebrow {
+        width: max-content;
+        margin: 0;
+        padding: 8px 12px;
+        border: 1px solid rgba(32, 24, 60, 0.28);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.34);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 580px;
+        margin: 54px 0 18px;
+        font-size: clamp(50px, 11vw, 78px);
+        line-height: 0.94;
+        letter-spacing: -0.065em;
+      }
+
+      .message {
+        max-width: 510px;
+        margin: 0;
+        font-size: clamp(18px, 4.3vw, 24px);
+        font-weight: 650;
+        line-height: 1.4;
+      }
+
+      .creative-cta {
+        width: max-content;
+        max-width: 100%;
+        margin: 22px 0 0;
+        padding: 14px 18px;
+        border: 2px solid rgba(32, 24, 60, 0.72);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: 0 10px 28px rgba(40, 27, 84, 0.16);
+        font-size: clamp(15px, 3.5vw, 18px);
+        font-weight: 900;
+        line-height: 1.3;
+      }
+
+      .post-copy {
+        padding: 23px 20px 25px;
+      }
+
+      .post-copy p {
+        margin: 0 0 16px;
+        color: #4d4568;
+        font-size: 16px;
+        line-height: 1.65;
+      }
+
+      .cta {
+        display: block;
+        width: 100%;
+        padding: 16px 18px;
+        border-radius: 15px;
+        background: #241c47;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 850;
+        text-align: center;
+      }
+
+      .record {
+        margin: 16px 4px 0;
+        color: #6e6685;
+        font-size: 12px;
+        line-height: 1.55;
+        text-align: center;
+      }
+
+      @media (max-width: 480px) {
+        main {
+          width: min(100% - 18px, 720px);
+          padding-top: 18px;
+        }
+
+        .evidence-bar {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        article {
+          border-radius: 22px;
+        }
+
+        .creative {
+          min-height: 390px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="evidence-bar" aria-label="Evidence status">
+        <span>BriefBond campaign evidence</span>
+        <span class="verified">Public and validator-readable</span>
+      </div>
+
+      <article aria-labelledby="post-headline">
+        <header class="brand-row">
+          <div class="brand-mark" aria-hidden="true">N</div>
+          <div>
+            <p class="brand-name">Northstar Drinks</p>
+            <p class="disclosure">Paid partnership with Northstar Drinks.</p>
+          </div>
+        </header>
+
+        <section class="creative">
+          <p class="eyebrow">Summer hydration</p>
+          <div>
+            <h1 id="post-headline">Summer starts with a sip.</h1>
+            <p class="message">
+              Fresh color. Clear energy. Take a water break while you make the most
+              of the season.
+            </p>
+            <p class="creative-cta">
+              Tap the link to discover the summer collection.
+            </p>
+          </div>
+        </section>
+
+        <section class="post-copy">
+          <p>
+            Bright days call for an easy reset. Northstar Drinks brings crisp,
+            colorful hydration to every summer plan.
+          </p>
+          <div class="cta">Tap the link to discover the summer collection.</div>
+        </section>
+      </article>
+
+      <p class="record">
+        Fictional demonstration content created to test BriefBond’s
+        hash-anchored, validator-consensus creator-campaign settlement workflow.
+      </p>
+    </main>
+  </body>
+</html>

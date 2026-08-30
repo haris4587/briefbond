@@ -29,7 +29,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-const CONTRACT_ADDRESS = "0xC83882792dFd41948C4eC4CF74c7a477EDccd549";
+const CONTRACT_ADDRESS = "0x3c38550CCF41685c1DF1d07A9823A70Df5998A91";
 const CONTRACT_READY = CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000";
 const EXPLORER_BASE = "https://explorer-studio.genlayer.com";
 
