@@ -41,6 +41,17 @@ Application tests: 5 passed
 Production build: passed
 ```
 
-The remaining external step is to deploy this exact v2 contract to Studionet,
-run a full-consensus campaign, and add the new address and transaction links to
-this repository before resubmission.
+## Verified Studionet result
+
+- **v2 contract:** [`0x37620B14f49069616cD1c24A286a94f0A18E7831`](https://explorer-studio.genlayer.com/address/0x37620B14f49069616cD1c24A286a94f0A18E7831)
+- **Deployment:** [`0xdaa1…c7f`](https://explorer-studio.genlayer.com/tx/0xdaa1376eabceebe87b646ceef6cafde418b000137ad02fbb9311d83035392c7f)
+- **Verified campaign funding:** [`0xf605…7cc7`](https://explorer-studio.genlayer.com/tx/0xf605be3716ed49de9d4ee6ce79ccfd9af74de6d8d31f15e7b9a55decbc507cc7)
+- **Authenticated judgment and settlement:** [`0x00cf…0dd3`](https://explorer-studio.genlayer.com/tx/0x00cf9edf27896cff8b19e9224f9be37ce2d9c5a4281749e18333c8f749be0dd3)
+- **Consensus:** five commits and five reveals
+- **Result:** `COMPLIANT`, `100/100`, `PAID`, `RELEASE_TO_CREATOR`
+- **Escrow:** `1 GEN` released; `0 GEN` remains locked
+- **Digest proof:** brief and post declared/fetched hashes matched; rendered-post
+  SHA-256 `1c9631b7b262e92a55f83208f721b55fdcf96f384b55977c96323e872d048ffd`
+
+This completed v2 run demonstrates that validators judged digest-authenticated
+evidence and that the accepted verdict produced the intended on-chain payout.

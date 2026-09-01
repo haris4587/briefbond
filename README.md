@@ -37,10 +37,26 @@ See the line-by-line [steward response](docs/STEWARD_RESPONSE.md) and the update
 - **Deployment status:** `FINALIZED` with five validator commits and five reveals.
 - **Source integrity:** deployed and repository source both SHA-256
   `96223c65b46f05991ab9ba2fc6f2791266001ba3c7eee3c4f6ffa5be8bc4c1f4`.
-- **v2 full-consensus proof:** pending after deployment.
+- **Campaign funding:** [`0xf605…7cc7`](https://explorer-studio.genlayer.com/tx/0xf605be3716ed49de9d4ee6ce79ccfd9af74de6d8d31f15e7b9a55decbc507cc7)
+- **Evidence judgment and settlement:** [`0x00cf…0dd3`](https://explorer-studio.genlayer.com/tx/0x00cf9edf27896cff8b19e9224f9be37ce2d9c5a4281749e18333c8f749be0dd3)
 
-The application is connected to the verified v2 Studionet address. The pending
-full-consensus proof will add the campaign-opening and settlement transactions.
+## Verified v2 full-consensus result
+
+Campaign `briefbond-v2-2026-001` completed on the verified v2 contract with five
+validator commits and five reveals:
+
+| Proof field | Verified result |
+| --- | --- |
+| Verdict and score | `COMPLIANT` — `100/100` |
+| Final state and action | `PAID` — `RELEASE_TO_CREATOR` |
+| Escrow | `1 GEN` released; `0 GEN` remains locked |
+| Brief authentication | Declared and fetched SHA-256 both `33f746b711c6ce5c60432984fb165a6388340d7dc502ac61f6ba2f0d4958fba5` |
+| Post authentication | Declared and fetched SHA-256 both `4ed35eade773e34c5e4474a500ae07715b438c300c38944e39dc9304fe4aa65e` |
+| Rendered proof | SHA-256 `1c9631b7b262e92a55f83208f721b55fdcf96f384b55977c96323e872d048ffd` |
+| Evidence response | `VERIFIED`; HTTP `200`; `417` bytes |
+
+The application is connected to this contract and exposes its campaign record
+through the **Inspect** tab.
 
 ## Historical v1 proof
 

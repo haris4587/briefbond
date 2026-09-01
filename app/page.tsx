@@ -32,6 +32,8 @@ import { toast } from "sonner";
 const CONTRACT_ADDRESS = "0x37620B14f49069616cD1c24A286a94f0A18E7831";
 const CONTRACT_READY = CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000";
 const DEPLOYMENT_TRANSACTION = "0xdaa1376eabceebe87b646ceef6cafde418b000137ad02fbb9311d83035392c7f";
+const OPEN_CAMPAIGN_TRANSACTION = "0xf605be3716ed49de9d4ee6ce79ccfd9af74de6d8d31f15e7b9a55decbc507cc7";
+const SETTLEMENT_TRANSACTION = "0x00cf9edf27896cff8b19e9224f9be37ce2d9c5a4281749e18333c8f749be0dd3";
 const EXPLORER_BASE = "https://explorer-studio.genlayer.com";
 
 type WalletAddress = `0x${string}`;
@@ -405,15 +407,18 @@ export default function Home() {
           </div>
 
           <div className="deployment-proof">
-            <span><BadgeCheck /> Verified v2 deployment</span>
-            <a
-              href={`${EXPLORER_BASE}/tx/${DEPLOYMENT_TRANSACTION}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Deployment transaction {compactAddress(DEPLOYMENT_TRANSACTION)}
-              <ArrowUpRight aria-hidden="true" />
-            </a>
+            <span><BadgeCheck /> PAID · COMPLIANT · 100/100</span>
+            <div className="proof-links">
+              <a href={`${EXPLORER_BASE}/tx/${DEPLOYMENT_TRANSACTION}`} target="_blank" rel="noreferrer">
+                Deploy {compactAddress(DEPLOYMENT_TRANSACTION)} <ArrowUpRight aria-hidden="true" />
+              </a>
+              <a href={`${EXPLORER_BASE}/tx/${OPEN_CAMPAIGN_TRANSACTION}`} target="_blank" rel="noreferrer">
+                Fund {compactAddress(OPEN_CAMPAIGN_TRANSACTION)} <ArrowUpRight aria-hidden="true" />
+              </a>
+              <a href={`${EXPLORER_BASE}/tx/${SETTLEMENT_TRANSACTION}`} target="_blank" rel="noreferrer">
+                Settle {compactAddress(SETTLEMENT_TRANSACTION)} <ArrowUpRight aria-hidden="true" />
+              </a>
+            </div>
           </div>
 
           <Tabs defaultValue="fund" className="campaign-tabs">
@@ -556,9 +561,9 @@ export default function Home() {
           <div className="proof-ledger">
             <div className="ledger-heading"><Fingerprint /><span>Immutable proof ledger</span></div>
             <div className="ledger-line"><span>Brief fetch</span><strong>Digest verified</strong></div>
-            <div className="ledger-line"><span>Post fetches</span><strong>Append-only</strong></div>
-            <div className="ledger-line"><span>Access failure</span><strong>Protected retry</strong></div>
-            <div className="ledger-line"><span>Decision makers</span><strong>AI validators</strong></div>
+            <div className="ledger-line"><span>Post fetch</span><strong>Hash matched</strong></div>
+            <div className="ledger-line"><span>Rendered proof</span><strong>Digest stored</strong></div>
+            <div className="ledger-line"><span>Full consensus</span><strong>PAID · 100/100</strong></div>
           </div>
 
           <a className="learn-link" href="https://docs.genlayer.com/" target="_blank" rel="noreferrer">

@@ -76,8 +76,14 @@ The v2 contract is deployed on Studionet at
 Its [deployment transaction](https://explorer-studio.genlayer.com/tx/0xdaa1376eabceebe87b646ceef6cafde418b000137ad02fbb9311d83035392c7f)
 is finalized. The deployed source and repository source share SHA-256
 `96223c65b46f05991ab9ba2fc6f2791266001ba3c7eee3c4f6ffa5be8bc4c1f4`.
-The campaign-opening and settlement proof transactions are the remaining
-Studionet evidence.
+
+The v2 demonstration was [funded with 1 GEN](https://explorer-studio.genlayer.com/tx/0xf605be3716ed49de9d4ee6ce79ccfd9af74de6d8d31f15e7b9a55decbc507cc7)
+and [settled under full consensus](https://explorer-studio.genlayer.com/tx/0x00cf9edf27896cff8b19e9224f9be37ce2d9c5a4281749e18333c8f749be0dd3).
+The final campaign state is `PAID`, the verdict is `COMPLIANT` at `100/100`,
+and the settlement action is `RELEASE_TO_CREATOR`. Five validators committed
+and revealed. The proof ledger records matching declared/fetched brief and post
+digests plus rendered-post SHA-256
+`1c9631b7b262e92a55f83208f721b55fdcf96f384b55977c96323e872d048ffd`.
 
 The historical v1 proof remains at
 [`0x3c38550CCF41685c1DF1d07A9823A70Df5998A91`](https://explorer-studio.genlayer.com/address/0x3c38550CCF41685c1DF1d07A9823A70Df5998A91),

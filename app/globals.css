@@ -95,6 +95,7 @@ a { color: inherit; text-decoration: none; }
 .contract-state.deploying span { background: var(--orange); animation: pulse 1.1s infinite; }
 .deployment-proof { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: -8px 0 24px; border: 2px solid var(--ink); border-radius: 12px; background: #dff8e8; padding: 11px 13px; font-size: 11px; font-weight: 900; }
 .deployment-proof span, .deployment-proof a { display: inline-flex; align-items: center; gap: 7px; }
+.proof-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 14px; }
 .deployment-proof svg { width: 16px; height: 16px; }
 .deployment-proof a { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; text-decoration: underline; text-underline-offset: 3px; }
 
@@ -218,6 +219,7 @@ footer { border-top: 2px solid var(--ink); width: 100%; padding: 20px max(20px, 
   .control-panel, .settlement-panel { padding: 18px; }
   .panel-heading { flex-direction: column; }
   .deployment-proof { align-items: flex-start; flex-direction: column; }
+  .proof-links { justify-content: flex-start; }
   .form-grid.two { grid-template-columns: 1fr; }
   .payout-strip { grid-template-columns: 1fr 105px; }
   .payout-strip .primary-action { grid-column: 1 / -1; }
