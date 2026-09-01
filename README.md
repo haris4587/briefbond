@@ -90,6 +90,7 @@ Revisions and retries append proof records; prior evidence is never overwritten.
 - `public/demo-sponsored-post-v3.html` — validator-readable demonstration post
 - `docs/STEWARD_RESPONSE.md` — requested issue mapped to code and tests
 - `docs/ARCHITECTURE.md` — v2 workflow and state machine
+- `docs/STUDIONET_V2_RUNBOOK.md` — exact deployment and proof inputs
 
 ## Local verification
 
