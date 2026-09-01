@@ -1,27 +1,77 @@
-# BriefBond architecture
+# BriefBond v2 architecture
 
-BriefBond is a creator-campaign escrow in which GenLayer is central to both the
-judgment and the settlement.
+BriefBond uses GenLayer consensus for evidence authentication, subjective
+campaign judgment, and the decision that precedes settlement. Storage and GEN
+transfers occur only after consensus accepts the non-deterministic result.
 
-The deployed Studionet contract is
-[`0xC83882792dFd41948C4eC4CF74c7a477EDccd549`](https://explorer-studio.genlayer.com/address/0xC83882792dFd41948C4eC4CF74c7a477EDccd549).
+## Evidence-bound workflow
 
-## Binding workflow
+1. A brand supplies a public brief URL, declared SHA-256, canonical campaign
+   terms, creator, threshold, deadline, and GEN payout.
+2. Validators independently fetch the brief response bytes and recompute the
+   SHA-256. A campaign cannot open unless the digest matches.
+3. The contract stores the verified brief digest and a separate `terms_hash`
+   over the canonical brief, disclosure, CTA, threshold, URL, and brief digest.
+4. The creator supplies a public post URL and declared SHA-256.
+5. In one jury round, each validator:
+   - fetches the raw post response and recomputes its SHA-256;
+   - rejects non-2xx, oversized, or mismatched evidence from judgment;
+   - renders authenticated evidence and hashes the screenshot bytes;
+   - independently scores the rendered post against locked terms.
+6. Consensus requires exact agreement on HTTP metadata, fetched digest, rendered
+   digest, evidence status, and verdict outcome. Limited score tolerance handles
+   legitimate subjective variation.
+7. Deterministic logic applies the accepted result to escrow.
 
-1. A brand opens a campaign and deposits GEN through `open_campaign`.
-2. The public brief URL, SHA-256 fingerprint, creator wallet, deadline, scoring
-   threshold, disclosure, and call to action are stored as immutable terms.
-3. Only the assigned creator may call `submit_and_settle`.
-4. The creator supplies a public post URL and a SHA-256 fingerprint for one
-   exact post version.
-5. GenLayer validators independently render the public post, compare it to the
-   locked terms, and reach consensus on a structured scorecard.
-6. Deterministic contract logic applies the accepted verdict:
-   - `COMPLIANT` plus the score threshold releases GEN to the creator.
-   - `FIX_REQUIRED` keeps GEN locked and permits a new hash-anchored version.
-   - `INVALID` refunds the brand.
-7. If the deadline expires before settlement, anyone may trigger a deterministic
-   refund to the brand.
+## State machine
 
-Every proof version remains readable from `get_proof`; revisions never overwrite
-the evidence or verdict that came before them.
+| Current event | New state | GEN action | Allowed next action |
+| --- | --- | --- | --- |
+| Campaign opens with verified brief | `FUNDED` | Lock | Creator submits evidence |
+| Verified post passes threshold | `PAID` | Release to creator | Final |
+| Verified post needs changes | `FIX_REQUIRED` | Hold | Creator submits new digest |
+| Fetch/digest/render authentication fails | `EVIDENCE_REVIEW` | Hold | Either party retries; creator may revise |
+| First verified `INVALID` | `REVIEW_REQUIRED` | Hold | Either party requests second review; creator may revise |
+| Second verified `INVALID` | `REFUNDED` | Refund brand | Final |
+| Deadline and protected retry window expire | `EXPIRED_REFUNDED` | Refund brand | Final |
+
+The one-hour `review_grace_until` prevents an evidence access failure near the
+deadline from becoming an immediate irreversible refund. A retry after the
+deadline remains possible while that protected window is open.
+
+## Independent validation
+
+The lead validator cannot self-certify its result. The validator function:
+
+1. independently re-fetches the URL;
+2. recomputes response length and SHA-256;
+3. independently re-renders and hashes the screenshot;
+4. independently asks its model to reproduce the outcome and four scores;
+5. requires an identical outcome, no category difference above 6 points, and a
+   total score difference no greater than 16 points.
+
+Any evidence digest disagreement rejects the leader proposal.
+
+## Append-only proof ledger
+
+`get_proof(campaign_id, version)` exposes every submission and retry round. Each
+record stores:
+
+- `declared_post_hash`
+- `fetched_post_hash`
+- `rendered_post_hash`
+- `hash_verified` and `evidence_status`
+- `http_status` and `content_length`
+- scorecard, outcome, reason, and required fix
+- `review_round` and `invalid_confirmations`
+- state and settlement action after the verdict
+
+`current_version` increments for every proof/review entry. New evidence and
+same-evidence retries therefore remain auditable without overwriting history.
+
+## Deployment status
+
+The v2 source is validated locally and awaiting its new Studionet deployment.
+The historical v1 proof remains at
+[`0x3c38550CCF41685c1DF1d07A9823A70Df5998A91`](https://explorer-studio.genlayer.com/address/0x3c38550CCF41685c1DF1d07A9823A70Df5998A91),
+but it is not represented as the v2 implementation.

@@ -29,12 +29,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-const CONTRACT_ADDRESS = "0x3c38550CCF41685c1DF1d07A9823A70Df5998A91";
+const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000";
 const CONTRACT_READY = CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000";
 const EXPLORER_BASE = "https://explorer-studio.genlayer.com";
 
 type WalletAddress = `0x${string}`;
-type BusyAction = "connect" | "fund" | "submit" | "inspect" | null;
+type BusyAction = "connect" | "fund" | "submit" | "inspect" | "retry" | null;
 
 type CampaignRecord = {
   campaign_id?: string;
@@ -42,11 +42,20 @@ type CampaignRecord = {
   brand_name?: string;
   creator_wallet?: string;
   brief_hash?: string;
+  brief_fetched_hash?: string;
+  brief_hash_verified?: boolean;
+  terms_hash?: string;
   status?: string;
   settlement_action?: string;
   current_score?: number;
   current_version?: number;
+  review_round?: number;
   current_post_hash?: string;
+  current_fetched_post_hash?: string;
+  current_rendered_post_hash?: string;
+  current_hash_verified?: boolean;
+  current_evidence_status?: string;
+  invalid_confirmations?: number;
   escrow_deposited_wei?: string;
   escrow_remaining_wei?: string;
 };
@@ -56,8 +65,8 @@ const sampleCampaign = {
   title: "Northstar Summer Hydration Launch",
   brand: "Northstar Drinks",
   creator: "0x0000000000000000000000000000000000000000",
-  briefUrl: "https://github.com/haris4587/briefbond/blob/main/examples/campaign-brief.md",
-  briefHash: "",
+  briefUrl: "https://briefbond.ansaf1st33.chatgpt.site/demo-campaign-brief-v2.txt",
+  briefHash: "33f746b711c6ce5c60432984fb165a6388340d7dc502ac61f6ba2f0d4958fba5",
   brief:
     "Publish one bright sponsored post using the line ‘Summer starts with a sip.’ The tone must feel energetic, unmistakably summery, and suitable for a general audience.",
   disclosure: "Paid partnership with Northstar Drinks",
@@ -137,7 +146,7 @@ function HashUpload({
       <div className="hash-topline">
         <div>
           <span className="field-label">{label} SHA-256</span>
-          <p>{fileName || "Choose the exact public file you are committing to."}</p>
+          <p>{fileName || "Hash the exact bytes served by the public URL."}</p>
         </div>
         <label className="upload-button">
           <Upload aria-hidden="true" />
@@ -286,6 +295,26 @@ export default function Home() {
     }
   }
 
+  async function retryReview() {
+    if (!record?.campaign_id) return;
+    setBusy("retry");
+    try {
+      const activeClient = requireClient();
+      const hash = await activeClient.writeContract({
+        address: CONTRACT_ADDRESS as WalletAddress,
+        functionName: "retry_review",
+        args: [record.campaign_id],
+        value: BigInt(0),
+      });
+      setTxHash(hash);
+      toast.success("Protected review retry submitted to consensus.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Review retry failed.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
   return (
     <main className="site-shell">
       <Toaster position="top-center" richColors />
@@ -312,11 +341,11 @@ export default function Home() {
         <div className="eyebrow"><Sparkles /> Sponsorship terms that actually settle</div>
         <h1>BRIEF. PROOF.<br /><span>PAID.</span></h1>
         <p>
-          Lock a creator campaign brief and its GEN payout. GenLayer validators inspect the
-          public post, reach neutral consensus, and enforce the result.
+          Lock a creator campaign brief and its GEN payout. GenLayer validators fetch,
+          fingerprint, inspect, and settle the exact public evidence by consensus.
         </p>
         <div className="trust-row">
-          <span><Fingerprint /> SHA-256 anchored</span>
+          <span><Fingerprint /> SHA-256 recomputed</span>
           <span><ShieldCheck /> Validator judged</span>
           <span><CircleDollarSign /> Binding payout</span>
         </div>
@@ -336,7 +365,7 @@ export default function Home() {
               rel="noreferrer"
               title="Open the deployed BriefBond contract in GenLayer Explorer"
             >
-              <span /> {CONTRACT_READY ? "Contract live" : "Deploying v1"}
+              <span /> {CONTRACT_READY ? "Contract live" : "Deploying v2"}
               <ArrowUpRight aria-hidden="true" />
             </a>
           </div>
@@ -351,7 +380,7 @@ export default function Home() {
             <TabsContent value="fund" className="tab-content">
               <div className="step-intro">
                 <span className="step-icon coral"><LockKeyhole /></span>
-                <div><h3>Lock the campaign</h3><p>The brief fingerprint and payout cannot be quietly changed later.</p></div>
+                <div><h3>Lock the campaign</h3><p>Validators fetch the public brief and reject funding unless its SHA-256 matches.</p></div>
               </div>
               <div className="form-grid two">
                 <Field label="Campaign ID"><Input value={campaign.id} onChange={(e) => setCampaign({ ...campaign, id: e.target.value })} /></Field>
@@ -359,7 +388,7 @@ export default function Home() {
                 <Field label="Brand name"><Input value={campaign.brand} onChange={(e) => setCampaign({ ...campaign, brand: e.target.value })} /></Field>
                 <Field label="Creator wallet"><Input value={campaign.creator} onChange={(e) => setCampaign({ ...campaign, creator: e.target.value })} className="mono-input" /></Field>
               </div>
-              <Field label="Public brief URL" hint="Use a permanent, publicly readable HTTPS link.">
+              <Field label="Public brief URL" hint="Use a stable HTTPS file whose response bytes exactly match the fingerprint.">
                 <div className="icon-input"><Link2 /><Input value={campaign.briefUrl} onChange={(e) => setCampaign({ ...campaign, briefUrl: e.target.value })} /></div>
               </Field>
               <HashUpload label="Brief" value={campaign.briefHash} onChange={(briefHash) => setCampaign({ ...campaign, briefHash })} />
@@ -383,14 +412,14 @@ export default function Home() {
             <TabsContent value="prove" className="tab-content">
               <div className="step-intro">
                 <span className="step-icon yellow"><FileCheck2 /></span>
-                <div><h3>Submit creator proof</h3><p>The assigned creator commits one exact post version for neutral review.</p></div>
+                <div><h3>Submit creator proof</h3><p>Validators recompute the fetched response digest before judging its rendered post.</p></div>
               </div>
               <Field label="Campaign ID"><Input value={submission.campaignId} onChange={(e) => setSubmission({ ...submission, campaignId: e.target.value })} /></Field>
               <Field label="Public sponsored-post URL" hint="The validator jury must be able to open it without signing in.">
                 <div className="icon-input"><Link2 /><Input value={submission.postUrl} onChange={(e) => setSubmission({ ...submission, postUrl: e.target.value })} placeholder="https://…" /></div>
               </Field>
               <HashUpload label="Post" value={submission.postHash} onChange={(postHash) => setSubmission({ ...submission, postHash })} />
-              <div className="proof-warning"><BadgeCheck /><p><strong>Version lock:</strong> revisions are welcome, but each revision needs a new fingerprint. Every previous verdict remains auditable.</p></div>
+              <div className="proof-warning"><BadgeCheck /><p><strong>Authenticated evidence:</strong> a mismatch or access failure holds the payout for retry. Every fetch, digest, and verdict remains auditable.</p></div>
               <Button className="primary-action wide" onClick={submitProof} disabled={busy === "submit" || !CONTRACT_READY}>
                 {busy === "submit" ? <LoaderCircle className="spin" /> : <ScanSearch />}
                 Submit to validator jury
@@ -415,11 +444,27 @@ export default function Home() {
                   <p>{record.brand_name} → {compactAddress(record.creator_wallet || "")}</p>
                   <div className="record-grid">
                     <div><small>Action</small><strong>{record.settlement_action}</strong></div>
-                    <div><small>Version</small><strong>v{record.current_version}</strong></div>
+                    <div><small>Proof / review</small><strong>v{record.current_version} / r{record.review_round ?? 0}</strong></div>
                     <div><small>Deposited</small><strong>{weiToGen(record.escrow_deposited_wei)} GEN</strong></div>
                     <div><small>Still locked</small><strong>{weiToGen(record.escrow_remaining_wei)} GEN</strong></div>
+                    <div><small>Evidence</small><strong>{record.current_evidence_status || "AWAITING_SUBMISSION"}</strong></div>
+                    <div><small>Hash check</small><strong>{record.current_hash_verified ? "MATCHED" : "NOT VERIFIED"}</strong></div>
+                    <div><small>Invalid reviews</small><strong>{record.invalid_confirmations ?? 0} / 2</strong></div>
+                    <div><small>Brief check</small><strong>{record.brief_hash_verified ? "MATCHED" : "NOT VERIFIED"}</strong></div>
                   </div>
-                  <div className="hash-readout"><Fingerprint /> {record.current_post_hash || record.brief_hash}</div>
+                  <div className="hash-stack">
+                    <div className="hash-readout"><Fingerprint /><span>Declared</span> {record.current_post_hash || record.brief_hash}</div>
+                    <div className="hash-readout"><BadgeCheck /><span>Fetched</span> {record.current_fetched_post_hash || record.brief_fetched_hash}</div>
+                    {record.current_rendered_post_hash ? (
+                      <div className="hash-readout"><ScanSearch /><span>Rendered</span> {record.current_rendered_post_hash}</div>
+                    ) : null}
+                  </div>
+                  {record.status === "EVIDENCE_REVIEW" || record.status === "REVIEW_REQUIRED" ? (
+                    <Button className="retry-action" onClick={retryReview} disabled={busy === "retry" || !CONTRACT_READY}>
+                      {busy === "retry" ? <LoaderCircle className="spin" /> : <RefreshCw />}
+                      Retry protected review
+                    </Button>
+                  ) : null}
                 </div>
               ) : (
                 <div className="empty-record"><ScanSearch /><p>No record loaded yet.</p></div>
@@ -450,18 +495,23 @@ export default function Home() {
               <div><strong>FIX REQUIRED</strong><p>Material fixable gap remains</p></div>
               <span className="outcome-result"><Clock3 /> Hold escrow</span>
             </article>
-            <article className="outcome-card refund">
+            <article className="outcome-card held">
               <span className="outcome-number">03</span>
-              <div><strong>INVALID</strong><p>Unrelated or deceptive evidence</p></div>
+              <div><strong>EVIDENCE REVIEW</strong><p>Unavailable or digest mismatch</p></div>
+              <span className="outcome-result"><RefreshCw /> Hold + retry</span>
+            </article>
+            <article className="outcome-card refund">
+              <span className="outcome-number">04</span>
+              <div><strong>INVALID ×2</strong><p>Two authenticated consensus reviews</p></div>
               <span className="outcome-result"><RefreshCw /> Refund brand</span>
             </article>
           </div>
 
           <div className="proof-ledger">
             <div className="ledger-heading"><Fingerprint /><span>Immutable proof ledger</span></div>
-            <div className="ledger-line"><span>Brief identity</span><strong>SHA-256</strong></div>
-            <div className="ledger-line"><span>Post versions</span><strong>Append-only</strong></div>
-            <div className="ledger-line"><span>Payout timing</span><strong>Finalized</strong></div>
+            <div className="ledger-line"><span>Brief fetch</span><strong>Digest verified</strong></div>
+            <div className="ledger-line"><span>Post fetches</span><strong>Append-only</strong></div>
+            <div className="ledger-line"><span>Access failure</span><strong>Protected retry</strong></div>
             <div className="ledger-line"><span>Decision makers</span><strong>AI validators</strong></div>
           </div>
 
