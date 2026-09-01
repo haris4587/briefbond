@@ -29,8 +29,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000";
+const CONTRACT_ADDRESS = "0x37620B14f49069616cD1c24A286a94f0A18E7831";
 const CONTRACT_READY = CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000";
+const DEPLOYMENT_TRANSACTION = "0xdaa1376eabceebe87b646ceef6cafde418b000137ad02fbb9311d83035392c7f";
 const EXPLORER_BASE = "https://explorer-studio.genlayer.com";
 
 type WalletAddress = `0x${string}`;
@@ -61,14 +62,14 @@ type CampaignRecord = {
 };
 
 const sampleCampaign = {
-  id: "northstar-summer-2026-01",
-  title: "Northstar Summer Hydration Launch",
+  id: "briefbond-v2-2026-001",
+  title: "Northstar Summer Hydration v2",
   brand: "Northstar Drinks",
   creator: "0x0000000000000000000000000000000000000000",
   briefUrl: "https://briefbond.ansaf1st33.chatgpt.site/demo-campaign-brief-v2.txt",
   briefHash: "33f746b711c6ce5c60432984fb165a6388340d7dc502ac61f6ba2f0d4958fba5",
   brief:
-    "Publish one bright sponsored post using the line ‘Summer starts with a sip.’ The tone must feel energetic, unmistakably summery, and suitable for a general audience.",
+    "Publish a bright sponsored summer hydration post using the locked campaign line and all required disclosure and call-to-action text.",
   disclosure: "Paid partnership with Northstar Drinks",
   cta: "Tap the link to discover the summer collection",
   threshold: "82",
@@ -399,6 +400,18 @@ export default function Home() {
               title="Open the deployed BriefBond contract in GenLayer Explorer"
             >
               <span /> {CONTRACT_READY ? "Contract live" : "Deploying v2"}
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          </div>
+
+          <div className="deployment-proof">
+            <span><BadgeCheck /> Verified v2 deployment</span>
+            <a
+              href={`${EXPLORER_BASE}/tx/${DEPLOYMENT_TRANSACTION}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Deployment transaction {compactAddress(DEPLOYMENT_TRANSACTION)}
               <ArrowUpRight aria-hidden="true" />
             </a>
           </div>

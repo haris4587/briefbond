@@ -71,7 +71,14 @@ same-evidence retries therefore remain auditable without overwriting history.
 
 ## Deployment status
 
-The v2 source is validated locally and awaiting its new Studionet deployment.
+The v2 contract is deployed on Studionet at
+[`0x37620B14f49069616cD1c24A286a94f0A18E7831`](https://explorer-studio.genlayer.com/address/0x37620B14f49069616cD1c24A286a94f0A18E7831).
+Its [deployment transaction](https://explorer-studio.genlayer.com/tx/0xdaa1376eabceebe87b646ceef6cafde418b000137ad02fbb9311d83035392c7f)
+is finalized. The deployed source and repository source share SHA-256
+`96223c65b46f05991ab9ba2fc6f2791266001ba3c7eee3c4f6ffa5be8bc4c1f4`.
+The campaign-opening and settlement proof transactions are the remaining
+Studionet evidence.
+
 The historical v1 proof remains at
 [`0x3c38550CCF41685c1DF1d07A9823A70Df5998A91`](https://explorer-studio.genlayer.com/address/0x3c38550CCF41685c1DF1d07A9823A70Df5998A91),
 but it is not represented as the v2 implementation.

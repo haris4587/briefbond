@@ -3,7 +3,15 @@
 Use this checklist to produce the final on-chain evidence for the steward
 resubmission.
 
-## 1. Deploy the exact v2 contract
+## Verified v2 deployment
+
+- **Contract:** [`0x37620B14f49069616cD1c24A286a94f0A18E7831`](https://explorer-studio.genlayer.com/address/0x37620B14f49069616cD1c24A286a94f0A18E7831)
+- **Deployment transaction:** [`0xdaa1376eabceebe87b646ceef6cafde418b000137ad02fbb9311d83035392c7f`](https://explorer-studio.genlayer.com/tx/0xdaa1376eabceebe87b646ceef6cafde418b000137ad02fbb9311d83035392c7f)
+- **Status:** `FINALIZED`; five validator commits and five reveals.
+- **Source SHA-256:** `96223c65b46f05991ab9ba2fc6f2791266001ba3c7eee3c4f6ffa5be8bc4c1f4`
+  for both the deployed source and `contracts/brief_bond.py`.
+
+## 1. Deploy the exact v2 contract — completed
 
 1. Open [GenLayer Studio](https://studio.genlayer.com/) on Studionet.
 2. Create or open the BriefBond contract editor.
@@ -11,7 +19,8 @@ resubmission.
    [`contracts/brief_bond.py`](../contracts/brief_bond.py) source.
 4. Confirm Studio shows no constructor inputs; `BriefBond.__init__` takes none.
 5. Click **Deploy** and wait for the deployment transaction to finalize.
-6. Record the new contract address and deployment transaction hash.
+6. Record the new contract address and deployment transaction hash. Completed
+   with the verified values above.
 
 Do not reuse the v1 address. This upgrade changes storage fields, public methods,
 and settlement behavior and therefore requires a fresh deployment.

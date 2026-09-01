@@ -32,12 +32,15 @@ See the line-by-line [steward response](docs/STEWARD_RESPONSE.md) and the update
 - **v2 contract source:** [`contracts/brief_bond.py`](contracts/brief_bond.py)
 - **Automated checks:** GenVM lint passed; 8 contract tests passed; application
   lint, build, and 5 interface tests passed.
-- **v2 Studionet deployment:** pending final deployment from GenLayer Studio.
+- **v2 Studionet contract:** [`0x37620B14f49069616cD1c24A286a94f0A18E7831`](https://explorer-studio.genlayer.com/address/0x37620B14f49069616cD1c24A286a94f0A18E7831)
+- **v2 deployment transaction:** [`0xdaa1…c7f`](https://explorer-studio.genlayer.com/tx/0xdaa1376eabceebe87b646ceef6cafde418b000137ad02fbb9311d83035392c7f)
+- **Deployment status:** `FINALIZED` with five validator commits and five reveals.
+- **Source integrity:** deployed and repository source both SHA-256
+  `96223c65b46f05991ab9ba2fc6f2791266001ba3c7eee3c4f6ffa5be8bc4c1f4`.
 - **v2 full-consensus proof:** pending after deployment.
 
-The application deliberately uses the zero-address deployment placeholder until
-the v2 address is available, preventing it from presenting the historical v1
-contract as the upgraded implementation.
+The application is connected to the verified v2 Studionet address. The pending
+full-consensus proof will add the campaign-opening and settlement transactions.
 
 ## Historical v1 proof
 
