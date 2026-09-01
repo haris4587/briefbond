@@ -69,7 +69,7 @@ const sampleCampaign = {
   briefUrl: "https://briefbond.ansaf1st33.chatgpt.site/demo-campaign-brief-v2.txt",
   briefHash: "33f746b711c6ce5c60432984fb165a6388340d7dc502ac61f6ba2f0d4958fba5",
   brief:
-    "Publish a bright sponsored summer hydration post using the locked campaign line and all required disclosure and call-to-action text.",
+    "Publish one public sponsored post for Northstar Drinks. It must visibly include the campaign line \"Summer starts with a sip.\", use a bright energetic summer tone, include the required disclosure and call-to-action, and use language suitable for a general audience.",
   disclosure: "Paid partnership with Northstar Drinks",
   cta: "Tap the link to discover the summer collection",
   threshold: "82",
