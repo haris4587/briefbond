@@ -126,19 +126,46 @@ function Field({
 function HashUpload({
   label,
   value,
+  publicUrl,
   onChange,
 }: {
   label: string;
   value: string;
+  publicUrl: string;
   onChange: (value: string) => void;
 }) {
   const [fileName, setFileName] = useState("");
+  const [hashingUrl, setHashingUrl] = useState(false);
 
   async function handleFile(file?: File) {
     if (!file) return;
     setFileName(file.name);
     onChange(await sha256(file));
     toast.success(`${label} fingerprint created`);
+  }
+
+  async function handlePublicUrl() {
+    if (!publicUrl.trim()) {
+      toast.error(`Enter the public ${label.toLowerCase()} URL first.`);
+      return;
+    }
+    setHashingUrl(true);
+    try {
+      const response = await fetch(publicUrl, { cache: "no-store" });
+      if (!response.ok) throw new Error(`Public URL returned HTTP ${response.status}.`);
+      const body = await response.arrayBuffer();
+      const digest = await crypto.subtle.digest("SHA-256", body);
+      const fingerprint = Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+      setFileName(`Fetched ${response.status} · ${body.byteLength} bytes`);
+      onChange(fingerprint);
+      toast.success(`${label} URL response fingerprinted`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not hash the public URL.");
+    } finally {
+      setHashingUrl(false);
+    }
   }
 
   return (
@@ -148,15 +175,21 @@ function HashUpload({
           <span className="field-label">{label} SHA-256</span>
           <p>{fileName || "Hash the exact bytes served by the public URL."}</p>
         </div>
-        <label className="upload-button">
-          <Upload aria-hidden="true" />
-          Hash file
-          <input
-            type="file"
-            onChange={(event) => handleFile(event.target.files?.[0])}
-            aria-label={`Upload ${label.toLowerCase()} file to calculate SHA-256`}
-          />
-        </label>
+        <div className="hash-actions">
+          <button className="hash-url-button" type="button" onClick={handlePublicUrl} disabled={hashingUrl}>
+            {hashingUrl ? <LoaderCircle className="spin" /> : <Link2 aria-hidden="true" />}
+            Hash URL
+          </button>
+          <label className="upload-button">
+            <Upload aria-hidden="true" />
+            Hash file
+            <input
+              type="file"
+              onChange={(event) => handleFile(event.target.files?.[0])}
+              aria-label={`Upload ${label.toLowerCase()} file to calculate SHA-256`}
+            />
+          </label>
+        </div>
       </div>
       <Input
         value={value}
@@ -180,8 +213,8 @@ export default function Home() {
   });
   const [submission, setSubmission] = useState({
     campaignId: sampleCampaign.id,
-    postUrl: "",
-    postHash: "",
+    postUrl: "https://briefbond.ansaf1st33.chatgpt.site/demo-sponsored-post-v4.txt",
+    postHash: "4ed35eade773e34c5e4474a500ae07715b438c300c38944e39dc9304fe4aa65e",
   });
   const [lookupId, setLookupId] = useState(sampleCampaign.id);
   const [record, setRecord] = useState<CampaignRecord | null>(null);
@@ -391,7 +424,7 @@ export default function Home() {
               <Field label="Public brief URL" hint="Use a stable HTTPS file whose response bytes exactly match the fingerprint.">
                 <div className="icon-input"><Link2 /><Input value={campaign.briefUrl} onChange={(e) => setCampaign({ ...campaign, briefUrl: e.target.value })} /></div>
               </Field>
-              <HashUpload label="Brief" value={campaign.briefHash} onChange={(briefHash) => setCampaign({ ...campaign, briefHash })} />
+              <HashUpload label="Brief" value={campaign.briefHash} publicUrl={campaign.briefUrl} onChange={(briefHash) => setCampaign({ ...campaign, briefHash })} />
               <Field label="Campaign brief"><Textarea value={campaign.brief} onChange={(e) => setCampaign({ ...campaign, brief: e.target.value })} rows={4} /></Field>
               <div className="form-grid two">
                 <Field label="Required disclosure"><Input value={campaign.disclosure} onChange={(e) => setCampaign({ ...campaign, disclosure: e.target.value })} /></Field>
@@ -418,7 +451,7 @@ export default function Home() {
               <Field label="Public sponsored-post URL" hint="The validator jury must be able to open it without signing in.">
                 <div className="icon-input"><Link2 /><Input value={submission.postUrl} onChange={(e) => setSubmission({ ...submission, postUrl: e.target.value })} placeholder="https://…" /></div>
               </Field>
-              <HashUpload label="Post" value={submission.postHash} onChange={(postHash) => setSubmission({ ...submission, postHash })} />
+              <HashUpload label="Post" value={submission.postHash} publicUrl={submission.postUrl} onChange={(postHash) => setSubmission({ ...submission, postHash })} />
               <div className="proof-warning"><BadgeCheck /><p><strong>Authenticated evidence:</strong> a mismatch or access failure holds the payout for retry. Every fetch, digest, and verdict remains auditable.</p></div>
               <Button className="primary-action wide" onClick={submitProof} disabled={busy === "submit" || !CONTRACT_READY}>
                 {busy === "submit" ? <LoaderCircle className="spin" /> : <ScanSearch />}

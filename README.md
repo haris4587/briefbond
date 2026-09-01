@@ -86,6 +86,7 @@ Revisions and retries append proof records; prior evidence is never overwritten.
 - `app/` — mobile-first GenLayer application with retry controls
 - `examples/campaign-brief-v2.md` — readable v2 demonstration terms
 - `public/demo-campaign-brief-v2.txt` — exact hashable public brief bytes
+- `public/demo-sponsored-post-v4.txt` — stable digest-bound v2 post evidence
 - `public/demo-sponsored-post-v3.html` — validator-readable demonstration post
 - `docs/STEWARD_RESPONSE.md` — requested issue mapped to code and tests
 - `docs/ARCHITECTURE.md` — v2 workflow and state machine
